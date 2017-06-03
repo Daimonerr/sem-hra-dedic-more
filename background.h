@@ -36,7 +36,14 @@ class CBack {
 		CBack();
 		void drawMap()const;
 		void startMenu(vector<LOADLEVEL> & fileVect, int & cntFileObjs);
-		void printUtilities(const int & score, const int & remainObst, const int & health,CTimer & timer, const bool & isReloading, const int & mag);
+		void printUtilities(const int & score, 
+							const int & remainObst, 
+							const int & health,
+							CTimer & timer, 
+							const bool & isReloading, 
+							const int & mag, 
+							const int & bonus);
+
 		void gameEnding(const int & score);
 		void pauseGame();
 

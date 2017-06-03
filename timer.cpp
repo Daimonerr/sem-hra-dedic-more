@@ -45,7 +45,7 @@ int CTimer::getPlaytime()
 	return (c_min*60)+c_sec;
 }
 
-int CTimer::reloadTime(const int & reloadT)
+int CTimer::endTime(const int & reloadT)
 {
 	return (c_min*60)+c_sec+reloadT;
 }

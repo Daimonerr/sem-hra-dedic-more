@@ -1,18 +1,20 @@
 #include "game.h"
 
-CGame::CGame(): c_cntBullets(0), c_score(0), c_crntObst(0), c_health(3), c_remainObst(0), c_mag(10), c_isReloading(false), c_reloadT(0), c_cntFileObjs(0)
+CGame::CGame(): c_cntBullets(0), c_score(0), c_crntObst(0), c_health(3), c_remainObst(0), c_mag(10), c_isReloading(false), c_reloadT(0), c_bonus(0), c_bonusTime(0), c_cntFileObjs(0)
 {
 	initscr();	
+	srand(time(NULL));
 }
 
 
 CGame::~CGame()
 {
 	nodelay(stdscr, false);
-	for (auto it = 	obstacles.begin() ; it != obstacles.end(); ++it)
-		{ delete (*it); }
+	for (auto it = 	obstacles.begin() ; it != obstacles.end(); ++it){ 
+		delete (*it);}
     obstacles.clear();
     ammo.clear();
+    file.clear();
 	endwin();
 }
 
@@ -25,7 +27,6 @@ void CGame::moveBullets()
 			deleteBullet(i);
 			i--;
 		}
-		
 	}	
 }
 
@@ -56,14 +57,14 @@ void CGame::runGame()
 		checkShip();
 		checkBullets();
 
-
+		checkBonuses();
 //////////////////////////////////////////////
 		usleep(20000);
 //////////////////////////////////////////////
 		BattleShip.clearO();
 		checkReloading();
 		gameControll();
-		background.printUtilities(c_score, c_remainObst, c_health, timer, c_isReloading, c_mag);
+	//	background.printUtilities(c_score, c_remainObst, c_health, timer, c_isReloading, c_mag, c_bonus);
 		timer.addTime();
 	}
 
@@ -88,7 +89,12 @@ bool CGame::hitShip(YXPART & shipCPoint)
 		if (obstacles[j]->collide(shipCPoint.offsY,shipCPoint.offsX))
 		{
 			deleteObst(j);
-			c_health--;	
+
+			if(c_bonus == BONUSINDESTRUCT )
+				c_score += 20;
+			else
+				c_health--;
+
 			return true;
 		}
 	}
@@ -112,8 +118,8 @@ void CGame::reloadMag()
 	c_isReloading = true;
 
 
-//BONNUS s bonusem přebíjí
-	c_reloadT = timer.reloadTime(4);
+//BONUS s bonusem přebíjí
+	c_reloadT = timer.endTime(4);
 
 
 }
@@ -173,12 +179,19 @@ void CGame::gameControll()
 		case 'f':
 			if (c_isReloading==true)
 				break;
-			if (c_mag == 0)
-				reloadMag();
-			else{
+			if (c_mag != 0)
+			{
 				ammo.push_back(BattleShip.newBullet());
-				c_mag--;
 				c_cntBullets++;
+
+				if (c_bonus == BONUSGUNS){
+					ammo.push_back(BattleShip.newBullet(0,-3));
+					ammo.push_back(BattleShip.newBullet(0,3));
+					c_cntBullets += 2;
+				}
+
+				if(c_bonus != BONUSAMMO)
+					c_mag--;
 			}
 			break;
 		case 'l':
@@ -199,8 +212,7 @@ void CGame::moveObstacles()
 
 	for (int i = 0; i < c_crntObst; i++)
 	{
-		if( ! obstacles[i]->moveO(timer))
-		{
+		if( ! obstacles[i]->moveO(timer)){
 			deleteObst(i);
 			i--;
 		}
@@ -258,5 +270,25 @@ bool CGame::gameOver()
 	if ( c_health == 0)
 		return true;
 	return false;
+}
+
+void CGame::checkBonuses()
+{
+	if (c_score % 500 == 0 && c_bonus==0 && c_score != 0)
+		rollBonus();
+
+	if(c_bonusTime == timer.getPlaytime())
+	{
+		c_bonusTime=0;
+		c_bonus=0;
+	}
+
+}
+
+void CGame::rollBonus()
+{
+	int rndNumber = rand() % 3 + 1;
+	c_bonus = rndNumber;
+	c_bonusTime = timer.endTime(10);
 }
 

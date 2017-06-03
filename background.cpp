@@ -22,7 +22,7 @@ void CBack::drawMap()const
 	mvprintw(3,66,"TIME");
 	mvprintw(7,65,"REMAIN");
 	mvprintw(11,66,"SCORE");
-//	mvprintw(12,65,"BONUS");
+	mvprintw(15,66,"BONUS");
 
 	mvprintw(34,66,"MAG");
 	mvprintw(38,65,"HEALTH");
@@ -86,19 +86,44 @@ void CBack::startMenu(vector<LOADLEVEL> & fileVect, int & cntFileObjs)
 	clear();
 }
 
-void CBack::printUtilities (const int & score, const int & remainObst, const int & health,CTimer & timer, const bool & isReloading, const int & mag) 
+void CBack::printUtilities (const int & score, 
+							const int & remainObst, 
+							const int & health,
+							CTimer & timer, 
+							const bool & isReloading, 
+							const int & mag,
+							const int & bonus) 
 {
 	mvprintw(8,67,"   ");
 	mvprintw(8,67,"%d", remainObst);
 	mvprintw(12,67,"%d", score);
 	mvprintw(40,67,"%d", health);
 	mvprintw(4,66,"%s", timer.printTime().c_str());	
+	
+
+	switch(bonus)
+	{
+		case 0:
+			mvprintw(16,65,"       ");
+			break;
+		case 1:
+			mvprintw(16,67,"AMMO");
+			break;
+		case 2:
+			mvprintw(16,65,"INDESTR");
+			break;
+		case 3:
+			mvprintw(16,67,"GUNS");
+			break;
+	}
+
 	if (isReloading == true)
 		mvprintw(35,64,"RELOADING");
 	else{
 		mvprintw(35,64,"         ");
 		mvprintw(35,67,"%d", mag);
 	}
+
 }
 
 void CBack::gameEnding(const int & score)

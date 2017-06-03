@@ -32,12 +32,18 @@ CShip::CShip ():CObject(41,28,'A')
 
 CBullet CShip::newBullet()
 {
-	CBullet newB(c_posY-1, c_posX, '*');
+	CBullet newB(c_posY-2, c_posX, '*');
 
 	return newB;
 }
 
 
+CBullet CShip::newBullet(const int & offsetY, const int & offsetX)
+{
+	CBullet newB(c_posY+offsetY, c_posX+offsetX, '*');
+
+	return newB;
+}
 
 void CShip::moveLeft()
 {
@@ -70,4 +76,21 @@ void CShip::moveDown()
 bool CShip::isCollision()
 {
 	return false;
+}
+
+void CShip::printShield(const char & pChar)
+{
+   mvaddch(c_posY-2, c_posX,pChar);
+   mvaddch(c_posY-2, c_posX+1,pChar);
+   mvaddch(c_posY-2, c_posX-1,pChar);
+   mvaddch(c_posY-2, c_posX+2,pChar);
+   mvaddch(c_posY-2, c_posX-2,pChar);
+   mvaddch(c_posY-1, c_posX-2,pChar);
+   mvaddch(c_posY-1, c_posX+2,pChar);
+   mvaddch(c_posY, c_posX-3,pChar);
+   mvaddch(c_posY, c_posX+3,pChar);
+   mvaddch(c_posY+1, c_posX+4,pChar);
+   mvaddch(c_posY+1, c_posX-4,pChar);
+   mvaddch(c_posY+2, c_posX-4,pChar);
+   mvaddch(c_posY+2, c_posX+4,pChar);
 }

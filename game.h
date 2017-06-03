@@ -9,9 +9,15 @@
 #include <algorithm>
 #include <sstream>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "background.h"
 
 using namespace std;
+
+#define BONUSAMMO 1
+#define BONUSINDESTRUCT 2
+#define BONUSGUNS 3
 
 
 class CGame {
@@ -24,7 +30,8 @@ class CGame {
 		void checkShip();
 		void checkBullets();
 		void checkReloading();
-
+		void checkBonuses();
+		void rollBonus();
 	private:
 		void reloadMag();
 		void moveObstacles();
@@ -34,6 +41,7 @@ class CGame {
 		bool gameOver();
 		bool hitBullet(YXPART & bullet, const int & cnt);
 		bool hitShip(YXPART & shipCPoint);
+
 
 		vector<CObstacle*> obstacles;
 		vector<CBullet> ammo;
@@ -46,7 +54,8 @@ class CGame {
 		bool c_isReloading;
 		int c_reloadT;
 
-
+		int c_bonus;
+		int c_bonusTime;
 
 		///////////////
 		vector<LOADLEVEL> file;

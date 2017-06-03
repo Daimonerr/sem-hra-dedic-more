@@ -9,18 +9,13 @@ class CShip : public CObject {
 	public:
 		CShip();
 		CBullet newBullet();
+		CBullet newBullet(const int & offsetY, const int & offsetX);
 		void moveLeft();
 		void moveRight();
 		void moveUp();
 		void moveDown();
+		void printShield(const char & pChar);
 		virtual bool isCollision();
-//	private:
-//		vector<YXPART> ship;
-//		vector<CBullet> ammo;
-//		void buildPart(const int & y,const int & x,const char & part);
-
-//		int cntBullets;
-//		int shipLength;
 };
 
 
