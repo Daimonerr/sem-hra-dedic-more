@@ -23,6 +23,8 @@ void CBack::drawMap()const
 	mvprintw(7,65,"REMAIN");
 	mvprintw(11,66,"SCORE");
 //	mvprintw(12,65,"BONUS");
+
+	mvprintw(34,66,"MAG");
 	mvprintw(38,65,"HEALTH");
 
 	attroff(A_UNDERLINE);
@@ -54,8 +56,8 @@ void CBack::startMenu(vector<LOADLEVEL> & fileVect, int & cntFileObjs)
 	mvprintw(21,10,"Game has 10 levels in total.");
 	mvprintw(22,10,"Higher levels are going to be harder to survive.");
 	mvprintw(23,10,"Each destroyed obstacle gives you +20 score.");
-	mvprintw(24,10,"Every 400 points of score will give you random bonus");
-	mvprintw(25,10,"(more guns, shield, extra health).");
+	mvprintw(24,10,"Every 400 points of score will give you");
+	mvprintw(25,10,"random bonus (more guns, shield, extra health).");
 
 
 	attron(A_UNDERLINE);
@@ -68,6 +70,7 @@ void CBack::startMenu(vector<LOADLEVEL> & fileVect, int & cntFileObjs)
 	mvprintw(35,10,"Lower Arrow-Key - to move down");
 	mvprintw(37,10,"F               - to shoot");
 	mvprintw(39,10,"G               - to pause the game");
+	mvprintw(39,10,"R               - to reload");
 	move(11,22);
 
 	while ( ! getFile(fileVect,cntFileObjs))
@@ -83,13 +86,19 @@ void CBack::startMenu(vector<LOADLEVEL> & fileVect, int & cntFileObjs)
 	clear();
 }
 
-void CBack::printUtilities (const int & score, const int & remainObst, const int & health,CTimer & timer) 
+void CBack::printUtilities (const int & score, const int & remainObst, const int & health,CTimer & timer, const bool & isReloading, const int & mag) 
 {
 	mvprintw(8,67,"   ");
 	mvprintw(8,67,"%d", remainObst);
 	mvprintw(12,67,"%d", score);
 	mvprintw(40,67,"%d", health);
 	mvprintw(4,66,"%s", timer.printTime().c_str());	
+	if (isReloading == true)
+		mvprintw(35,64,"RELOADING");
+	else{
+		mvprintw(35,64,"         ");
+		mvprintw(35,67,"%d", mag);
+	}
 }
 
 void CBack::gameEnding(const int & score)

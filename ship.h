@@ -14,7 +14,7 @@ class CShip : public CObject {
 		void moveUp();
 		void moveDown();
 		virtual bool isCollision();
-	private:
+//	private:
 //		vector<YXPART> ship;
 //		vector<CBullet> ammo;
 //		void buildPart(const int & y,const int & x,const char & part);

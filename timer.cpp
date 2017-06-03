@@ -1,6 +1,6 @@
 #include "timer.h"
 
-CTimer::CTimer():c_min(0), c_sec(0), c_msec(0), c_playtime(0)
+CTimer::CTimer():c_min(0), c_sec(0), c_msec(0)
 {}
 
 void CTimer::addTime()
@@ -10,7 +10,6 @@ void CTimer::addTime()
 	if (c_msec == 100)
 	{
 		c_sec++;
-		c_playtime++;
 		c_msec = 0;
 	}
 
@@ -34,7 +33,6 @@ void CTimer::resetTime()
 	c_msec=0;
 	c_sec=0;
 	c_min=0;
-	c_playtime=0;
 }
 
 int CTimer::getMsec()
@@ -44,5 +42,10 @@ int CTimer::getMsec()
 
 int CTimer::getPlaytime()
 {
-	return c_playtime;
+	return (c_min*60)+c_sec;
+}
+
+int CTimer::reloadTime(const int & reloadT)
+{
+	return (c_min*60)+c_sec+reloadT;
 }

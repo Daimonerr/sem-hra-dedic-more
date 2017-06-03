@@ -14,12 +14,12 @@ class CTimer {
 		string printTime();
 		int getMsec();
 		int getPlaytime();
+		int reloadTime(const int & reloadT);
 
 	private:
 		int c_min;
 		int c_sec;
 		int c_msec;
-		int c_playtime;
 };
 
 

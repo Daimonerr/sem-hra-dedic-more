@@ -1,6 +1,6 @@
 #include "game.h"
 
-CGame::CGame(): c_cntBullets(0), c_score(0), c_crntObst(0), c_health(3), c_remainObst(0), c_cntFileObjs(0)
+CGame::CGame(): c_cntBullets(0), c_score(0), c_crntObst(0), c_health(3), c_remainObst(0), c_mag(10), c_isReloading(false), c_reloadT(0), c_cntFileObjs(0)
 {
 	initscr();	
 }
@@ -55,16 +55,15 @@ void CGame::runGame()
 		refresh();
 		checkShip();
 		checkBullets();
-		if (timer.getPlaytime() == 200 )
-			break;
 
 
 //////////////////////////////////////////////
 		usleep(20000);
 //////////////////////////////////////////////
 		BattleShip.clearO();
+		checkReloading();
 		gameControll();
-		background.printUtilities(c_score, c_remainObst, c_health, timer);
+		background.printUtilities(c_score, c_remainObst, c_health, timer, c_isReloading, c_mag);
 		timer.addTime();
 	}
 
@@ -107,6 +106,33 @@ void CGame::checkBullets()
 	}	
 }
 
+
+void CGame::reloadMag()
+{
+	c_isReloading = true;
+
+
+//BONNUS s bonusem přebíjí
+	c_reloadT = timer.reloadTime(4);
+
+
+}
+
+void CGame::checkReloading()
+{
+	if (c_isReloading == true && c_reloadT == timer.getPlaytime())
+	{
+		c_mag = 10;
+		c_isReloading = false;
+	}
+}
+
+
+
+
+
+
+
 bool CGame::hitBullet(YXPART & bullet, const int & cnt)
 {
 	for( int j = 0; j < c_crntObst; j++)
@@ -145,13 +171,23 @@ void CGame::gameControll()
 			break;
 		
 		case 'f':
-			ammo.push_back(BattleShip.newBullet());
-			c_cntBullets++;
+			if (c_isReloading==true)
+				break;
+			if (c_mag == 0)
+				reloadMag();
+			else{
+				ammo.push_back(BattleShip.newBullet());
+				c_mag--;
+				c_cntBullets++;
+			}
 			break;
 		case 'l':
 
 			background.pauseGame();
 			break;
+		case 'r':
+			if (c_isReloading != true)
+				reloadMag();
 	}
 
 }
@@ -223,3 +259,4 @@ bool CGame::gameOver()
 		return true;
 	return false;
 }
+
